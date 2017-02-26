@@ -12,13 +12,13 @@ var inputBut = document.getElementById("button");
 var displayText = document.getElementById("aqi-display");
 //object.addEverntListener(event,function,useCapture)事件监听法
 // inputBut.addEventListener('click',function(){
-//     displayText.innerText = inputText.value;
+//     displayText.innerText = inputHTML.value;
 // })();
 inputBut.onclick = function() {
     var x = inputText.value;
     if(x == "") {
         alert("不能为空，请输入");
     } else {
-        displayText.innerText = x;
+        displayText.innerHTML = x;
     }
 };
