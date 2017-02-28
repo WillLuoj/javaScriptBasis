@@ -14,9 +14,9 @@ function getData() {
     var li = dataUl.getElementsByTagName("li");//获取source的所有li子节点
     var data = new Array();
     for(var i = 0;i < li.length;i++) {
-        var b = li[i].firstElementChild;
-        var bText = b.firstChild.nodeValue;
-        var liText = li[i].firstChild.nodeValue;
+        var b = li[i].firstElementChild;//b节点
+        var bText = b.firstChild.nodeValue;//b节点内的内容
+        var liText = li[i].firstChild.nodeValue;//li节点内的内容
         data.push([liText,bText]);
     }
     return data;
@@ -27,7 +27,7 @@ function getData() {
  * 返回一个排序后的数组
  */
 function sortAqiData(data) {
-    // data = getData();
+    // 定义比较函数
     function compare(data1,data2) {
         if(data1[1] > data2[1]) {
             return 1;
@@ -37,7 +37,7 @@ function sortAqiData(data) {
             return 0;
         }
     }
-    data.sort(compare);
+    data.sort(compare);//按降序排序
     return data;
 }
 
@@ -48,6 +48,7 @@ function sortAqiData(data) {
  */
 function render(data) {
     // data = sortAqiData();
+    //用innerHTML方法将内容写入页面中
     var dataHtml = "";
     for(var i = 0;i < data.length;i++) {
         var chineseNum = [ "一","二","三","四", "五", "六", "七", "八", "九"];
@@ -67,7 +68,7 @@ function init() {
 
     // 在这下面给sort-btn绑定一个点击事件，点击时触发btnHandle函数
     var but = document.getElementById("sort-btn");
-    but.onclick = btnHandle;
+    but.onclick = btnHandle;//注：若onclick绑定的函数带括号的话，会自执行
 }
 
 init();
