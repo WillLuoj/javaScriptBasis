@@ -27,9 +27,7 @@ var EventUtil = {
     getEvent : function(event) {
         return event ? event : window.event;
     },
-    // getTarget : function(event) {
-    //     return event.target || event.srcElement;
-    // },
+
     //取消事件的默认行为，本例中取消keypress的输入
     preventDefault : function(event) {
         if(event.preventDefault) {
@@ -38,13 +36,7 @@ var EventUtil = {
             event.returnValue = false;
         }
     },
-    // stopPropagation : function(event) {
-    //     if(event.stopPropagation) {
-    //         event.stopPropagation();
-    //     } else {
-    //         event.cancelBubble = true;
-    //     }
-    // },
+
     //获取当前事件输入的字符
     getCharCode : function(event) {
         if (typeof event.charCode == "number" ) {
@@ -66,10 +58,18 @@ EventUtil.addHandler(textbox, "keypress", function(event) {
 
 var dataHandler = {
     //创建子节点
-    createNode : function(data) {
-        var node = document.createElement("div");
-        node.innerHTML = data;
-        return node;
+    createNode : function() {
+        var data = textbox.value;
+        if (data != '' && !isNaN(Number(data))) {
+            var node = document.createElement("div");
+            node.innerHTML = data;
+            return node;
+        } else {
+            alert("请输入数字");
+            dataHandler.clearInput(textbox);
+            return false;
+        }
+
     },
     //子节点插入前端
     leftInput : function(node) {
@@ -110,18 +110,21 @@ var dataHandler = {
 //绑定左侧入点击事件
 var leftInput = document.querySelector(".left-input");
 EventUtil.addHandler(leftInput, "click", function() {
-    var text = textbox.value;
-    var node = dataHandler.createNode(text);
-    dataHandler.leftInput(node);
-    dataHandler.clearInput(textbox);
+    var childNode = dataHandler.createNode();
+    if(childNode != false) {
+        dataHandler.leftInput(childNode);
+        dataHandler.clearInput(textbox);
+    }
+
 });
 //绑定右侧入点击事件
 var rightInput = document.querySelector(".right-input");
 EventUtil.addHandler(rightInput, "click", function() {
-    var text = textbox.value;
-    var node = dataHandler.createNode(text);
-    dataHandler.rightInput(node);
-    dataHandler.clearInput(textbox);
+    var childNode = dataHandler.createNode();
+    if(childNode != false) {
+       dataHandler.rightInput(childNode);
+       dataHandler.clearInput(textbox);
+    }
 });
 //绑定右侧出点击事件
 var rightDel = document.querySelector(".right-del");
