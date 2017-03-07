@@ -91,37 +91,51 @@ var dataHandler = {
         }
     },
 
-    //将queue数据进行冒泡排序，并将每次排序结果存储到data中
+    //将queue数据进行冒泡排序，
 
     bubbleSort : function() {
-        var len = dataList.length;
-        var data = [];
-        for (var i = 0; i < len; i++) {
-            for( var j = 0; j < len - 1 - i; j++) {
-
-                if ( dataList[j] > dataList[j+1]) {
-                    var temp = dataList[j+1];
-                    dataList[j+1] = dataList[j];
-                    dataList[j] = temp;
-
-                    if(dataList != undefined) {
-                        data.push(JSON.parse(JSON.stringify(dataList)));
-
-                    }
+        // var len = dataList.length;
+        // var data = [];
+        // for (var i = 0; i < len; i++) {
+        //     for( var j = 0; j < len - 1 - i; j++) {
+        //
+        //         if ( dataList[j] > dataList[j+1]) {
+        //             var temp = dataList[j+1];
+        //             dataList[j+1] = dataList[j];
+        //             dataList[j] = temp;
+        //
+        //             if(dataList != undefined) {
+        //                 data.push(JSON.parse(JSON.stringify(dataList)));
+        //
+        //             }
+        //         }
+        //     }
+        // }
+        //
+        // //设置延迟函数，使每次渲染间隔1000，达到可视化的效果
+        // setInterval(forSortRender,1000);
+        // function forSortRender(){
+        //     var s ;
+        //     s = data.shift();
+        //     if (s !== undefined) {
+        //         dataHandler.render(s);
+        //     }
+        //
+        // }
+        var a = 10;
+        var parentNode = document.querySelector(".numQueue");
+        var childNodes = parentNode.childNodes;
+        var temp;
+        for (var i = 0; i < childNodes.length; i++) {
+            for (var j = 0; j < childNodes.length - i -1; j++) {
+                if (childNodes[j].firstChild.nodeValue > childNodes[j+1].firstChild.nodeValue) {
+                    temp = childNodes[j+1];
+                    parentNode.replaceChild(childNodes[j],childNodes[j+1]);
+                    parentNode.insertBefore(temp,childNodes[j]);
                 }
             }
         }
 
-        //设置延迟函数，使每次渲染间隔1000，达到可视化的效果
-        setInterval(forSortRender,1000);
-        function forSortRender(){
-            var s ;
-            s = data.shift();
-            if (s !== undefined) {
-                dataHandler.render(s);
-            }
-
-        }
     },
 
     //将数据放入dataList前端

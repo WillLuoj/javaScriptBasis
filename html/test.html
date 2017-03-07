@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test</title>
+    <style type="text/css">
+        .parent div {
+            background-color: #30f23d;
+            width: 20px;
+            text-align: center;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="parent">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
+<script type="text/javascript">
+
+    var parent = document.querySelector(".parent");
+
+    for (var i = 0; i < parent.childNodes.length; i++) {
+        if( parent.childNodes[i].nodeType == '3' && parent.childNodes[i].nodeName == '#text' && !/S/.test(parent.childNodes[i].nodeValue) ) {
+            parent.removeChild(parent.childNodes[i]);
+        }
+    };
+    var temp = parent.childNodes[3];
+    parent.replaceChild(parent.childNodes[2],parent.childNodes[3]);
+    parent.insertBefore(temp,parent.childNodes[2]);
+
+</script>
+</body>
+</html>
