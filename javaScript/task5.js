@@ -166,7 +166,6 @@ var dataHandler = {
         }
         setTimeout(function() {
             dataHandler.setSuccess(childNodes);
-            alert(dataList);
         },x*500);
 
     },
