@@ -11,3 +11,9 @@
     text-align: center;
 
 }
+.numQueue .active {
+    background-color: yellow;
+}
+.numQueue .success {
+    background-color: blueviolet;
+}

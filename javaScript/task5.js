@@ -91,6 +91,29 @@ var dataHandler = {
         }
     },
 
+
+    //给正在比较的数据添加样式
+
+    setStyle : function(childNodes,j) {
+        Array.prototype.forEach.call(childNodes,function(div) {
+            div.className = "";
+        });
+        childNodes[j].classList.add("active");
+        childNodes[j+1].classList.add("active");
+    },
+
+    //给queue比较结束后添加样式，并重置dataList
+
+    setSuccess : function(childNodes) {
+        Array.prototype.forEach.call(childNodes,function(div) {
+            div.classList.remove("active");
+            div.classList.add("success");
+        });
+        for (var i = 0; i < childNodes.length; i++) {
+            dataList[i] = childNodes[i].firstChild.nodeValue;
+        }
+    },
+
     //将queue数据进行冒泡排序，
 
     bubbleSort : function() {
@@ -122,19 +145,29 @@ var dataHandler = {
         //     }
         //
         // }
-        var a = 10;
+        var x = 0;
         var parentNode = document.querySelector(".numQueue");
         var childNodes = parentNode.childNodes;
         var temp;
         for (var i = 0; i < childNodes.length; i++) {
             for (var j = 0; j < childNodes.length - i -1; j++) {
-                if (childNodes[j].firstChild.nodeValue > childNodes[j+1].firstChild.nodeValue) {
-                    temp = childNodes[j+1];
-                    parentNode.replaceChild(childNodes[j],childNodes[j+1]);
-                    parentNode.insertBefore(temp,childNodes[j]);
-                }
+                (function(j){
+                    setTimeout(function(){
+                        dataHandler.setStyle(childNodes,j);
+                        if (childNodes[j].firstChild.nodeValue > childNodes[j+1].firstChild.nodeValue) {
+                            temp = childNodes[j+1];
+                            parentNode.replaceChild(childNodes[j],childNodes[j+1]);
+                            parentNode.insertBefore(temp,childNodes[j]);
+                        }
+                    },x*500);
+                })(j);
+                x++
             }
         }
+        setTimeout(function() {
+            dataHandler.setSuccess(childNodes);
+            alert(dataList);
+        },x*500);
 
     },
 
@@ -161,8 +194,6 @@ var dataHandler = {
 
     //删除队列第一个节点并输出
     leftDel : function() {
-        // var delNode = queue.removeChild(queue.firstChild);
-        // return delNode;
         var delNode = dataList.shift();
         alert(delNode);
         dataHandler.render(dataList);
@@ -220,7 +251,6 @@ var leftDel = document.querySelector(".left-del");
 
 EventUtil.addHandler(leftDel, "click", function() {
     dataHandler.leftDel();
-    // alert(dataHandler.leftDel().firstChild.nodeValue);
 });
 
 //绑定冒泡排序可视化
