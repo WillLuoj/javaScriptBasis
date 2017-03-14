@@ -2,9 +2,13 @@
  * Created by luojw on 2017-3-9.
  */
 var textbox = document.getElementById("input"),
-    inputData,
-    dataArr,
-    keyCode;
+    numQueue = document.querySelector(".numQueue"),
+    inputData,//输入到textarea中的值
+    dataArr,//将输入的值分割为数组
+    data = [],
+    keyCode,//输入的键码
+    innerData;//渲染至页面的数据
+
 
 //事件对象
 var EventUtil = {
@@ -41,39 +45,122 @@ var EventUtil = {
     //使tab键输出在textarea中
     inputTab : function(event) {
         keyCode = EventUtil.getCharCode(event);
-        alert("输入tab");
-        EventUtil.preventDefault(event);
         if (keyCode == 9) {
             EventUtil.preventDefault(event);
-            alert("输入tab");
-            inputData += "  ";
+            textbox.value += "  ";
         }
     },
 
 };
 
-
-
-
-// 输入数据处理方法块 [^a-zA-Z\d\u4e00-\u9fa5,.!?()，．；;？]
+// 输入数据处理方法 [^a-zA-Z\d\u4e00-\u9fa5,.!?()，．；;？]
 var dataHandler = {
-
 
     // 将数据分割成数组
     splitData : function() {
-        inputData = textbox.value;
-        dataArr = inputData.split(/[^a-zA-Z\d\u4e00-\u9fa5]/);
-        alert(dataArr);
+        inputData = textbox.value.trim();
+        dataArr = inputData.split(/[^a-zA-Z\d\u4e00-\u9fa5]+/);
+        return dataArr;
+    },
 
-    }
+    //将数据数组渲染在页面中
+
+    render : function(data) {
+        for (var i = 0; i < data.length; i++) {
+            if(data != "") {
+                innerData += "<div>" + data[i] + "</div>";
+            }
+        }
+        innerData = innerData.replace(undefined,"");
+        numQueue.innerHTML = innerData;
+        innerData = "";
+        dataHandler.clearInput(textbox);
+    },
+
+    //事件结束后清除input内的输入
+    clearInput : function(textbox) {
+        if (textbox.value) {
+            try {
+                textbox.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+            } catch (err) {
+                if (textbox.value) { //for IE5 ~ IE10
+                    var form = document.createElement('form'), ref = textbox.nextSibling, p = input.parentNode;
+                    form.appendChild(textbox);
+                    form.reset();
+                    p.insertBefore(textbox, ref);
+                }
+            }
+        }
+    },
+
 }
 
-var test = document.querySelector(".left-input");
-EventUtil.addHandler(test, "click", function () {
+//按键事件
 
+var btnHandler = {
+    //左侧输入
+    leftInput : function() {
+        data = dataHandler.splitData().concat(data);
+        return data;
+    },
 
-    dataHandler.splitData();
-});
-EventUtil.addHandler(textbox, "keyon", function () {
+    //右侧输入
+    rightInput : function() {
+        data = data.concat(dataHandler.splitData());
+        return data;
+    },
+
+    //左侧删除
+    leftDel : function() {
+        data.shift();
+        return data;
+    },
+
+    //右侧删除
+    rightDel : function() {
+        data.pop();
+        return data;
+    }
+}
+    //实现输入tab
+EventUtil.addHandler(textbox, "keydown", function () {
     EventUtil.inputTab(EventUtil.getEvent());
 });
+
+var leftInput = document.querySelector(".left-input");
+EventUtil.addHandler(leftInput, "click", function () {
+    data = btnHandler.leftInput();
+    dataHandler.render(data);
+});
+
+var rightInput = document.querySelector(".right-input");
+EventUtil.addHandler(rightInput, "click", function () {
+    data = btnHandler.rightInput();
+    dataHandler.render(data);
+});
+
+var leftDel = document.querySelector(".left-del");
+EventUtil.addHandler(leftDel, "click", function () {
+    data = btnHandler.leftDel();
+    dataHandler.render(data);
+});
+
+var rightDel = document.querySelector(".right-del");
+EventUtil.addHandler(rightDel, "click", function () {
+    data = btnHandler.rightDel();
+    dataHandler.render(data);
+});
+
+var search = document.getElementById("search");
+var searchBtn = document.querySelector(".search");
+
+EventUtil.addHandler(searchBtn, "click", function () {
+    var searchText = search.value;
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].indexOf(searchText) != -1) {
+
+        }
+    }
+})
+
+
