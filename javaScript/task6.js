@@ -49,7 +49,7 @@ var EventUtil = {
             EventUtil.preventDefault(event);
             textbox.value += "  ";
         }
-    },
+    }
 
 };
 
@@ -91,7 +91,7 @@ var dataHandler = {
                 }
             }
         }
-    },
+    }
 
 }
 
@@ -121,11 +121,13 @@ var btnHandler = {
         data.pop();
         return data;
     }
-}
+};
     //实现输入tab
 EventUtil.addHandler(textbox, "keydown", function () {
     EventUtil.inputTab(EventUtil.getEvent());
 });
+
+//绑定按键事件
 
 var leftInput = document.querySelector(".left-input");
 EventUtil.addHandler(leftInput, "click", function () {
@@ -151,16 +153,30 @@ EventUtil.addHandler(rightDel, "click", function () {
     dataHandler.render(data);
 });
 
+
+//查询事件
 var search = document.getElementById("search");
 var searchBtn = document.querySelector(".search");
 
 EventUtil.addHandler(searchBtn, "click", function () {
     var searchText = search.value;
+
+    var childNodes = numQueue.childNodes;
+
+    //去除上次搜索结果样式
+    Array.prototype.forEach.call(childNodes,function(div) {
+        div.classList.remove("active");
+    });
+
+    //给搜索到的内容绑定样式
     for (var i = 0; i < data.length; i++) {
         if (data[i].indexOf(searchText) != -1) {
-
+            console.log(childNodes[i]);
+            childNodes[i].classList.add("active");
         }
     }
-})
+    //去除搜索框输入
+    dataHandler.clearInput(search);
+});
 
 

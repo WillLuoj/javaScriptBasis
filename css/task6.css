@@ -6,3 +6,6 @@
     display: inline-block;
     margin: 20px;
 }
+.numQueue .active {
+    background-color: darkred;
+}
